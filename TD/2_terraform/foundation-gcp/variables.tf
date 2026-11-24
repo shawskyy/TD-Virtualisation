@@ -15,3 +15,9 @@ variable "zone" {
   type        = string
   default     = "europe-west1-b"
 }
+
+variable "vm_count" {
+  description = "Nombre d'instances de la VM (haute disponibilité)"
+  type        = number
+  default     = 2
+}

@@ -1,5 +1,7 @@
 resource "google_compute_instance" "vm" {
-  name         = "td2-vm"
+  count = var.vm_count
+
+  name         = "td2-vm-${count.index}"
   machine_type = "e2-micro"
   zone         = var.zone
 

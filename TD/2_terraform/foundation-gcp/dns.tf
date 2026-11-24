@@ -8,5 +8,5 @@ resource "google_dns_record_set" "app" {
   managed_zone = google_dns_managed_zone.zone.name
   type         = "A"
   ttl          = 300
-  rrdatas      = [google_compute_instance.vm.network_interface[0].access_config[0].nat_ip]
+  rrdatas      = google_compute_instance.vm[*].network_interface[0].access_config[0].nat_ip
 }
