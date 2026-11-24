@@ -9,3 +9,9 @@ variable "region" {
   type        = string
   default     = "europe-west1"
 }
+
+variable "zone" {
+  description = "Zone (datacenter) de la région où tourne la VM"
+  type        = string
+  default     = "europe-west1-b"
+}
