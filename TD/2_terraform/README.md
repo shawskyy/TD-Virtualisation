@@ -8,29 +8,32 @@
 ├── foundation-gcp/
 │   ├── providers.tf
 │   ├── variables.tf
-│   ├── network.tf
-│   ├── compute.tf
-│   ├── database.tf
-│   └── dns.tf
+│   ├── main.tf
+│   └── outputs.tf
 └── foundation-aws/
     ├── providers.tf
     ├── variables.tf
-    ├── network.tf
-    ├── compute.tf
-    ├── database.tf
-    └── dns.tf
+    ├── main.tf
+    └── outputs.tf
 ```
+
+| Fichier | Contenu |
+| ------- | ------- |
+| `providers.tf` | Provider(s) utilisé(s) (API du fournisseur) |
+| `variables.tf` | Variables (`var.`) |
+| `main.tf` | Ressources |
+| `outputs.tf` | Sorties |
 
 ## foundation-gcp
 
-| Étape | Ressource(s) | Fichier |
-| ----- | ------------ | ------- |
-| 0 | Provider `google` (et `random`) | `providers.tf` |
-| 1 | VPC `google_compute_network` + sous-réseau en `europe-west1` | `network.tf` |
-| 2 | VM `google_compute_instance` dans le sous-réseau | `compute.tf` |
-| 3 | Base `google_sql_database_instance` avec IP privée dans le VPC | `database.tf` |
-| 4 | Zone `google_dns_managed_zone` + enregistrement `google_dns_record_set` | `dns.tf` |
-| 5 | Meta-argument `count` sur la VM (`var.vm_count = 2`) | `compute.tf` |
+| Étape | Ressource(s) |
+| ----- | ------------ |
+| 0 | Provider `google` (et `random`) |
+| 1 | VPC `google_compute_network` + sous-réseau en `europe-west1` |
+| 2 | VM `google_compute_instance` dans le sous-réseau |
+| 3 | Base `google_sql_database_instance` avec IP privée dans le VPC |
+| 4 | Zone `google_dns_managed_zone` + enregistrement `google_dns_record_set` |
+| 5 | Meta-argument `count` sur la VM (`var.vm_count = 2`) |
 
 ### Commandes
 
@@ -427,6 +430,15 @@ Terraform will perform the following actions:
 
 Plan: 12 to add, 0 to change, 0 to destroy.
 
+Changes to Outputs:
+  + app_dns_name  = "app.kiowy.com."
+  + db_password   = (sensitive value)
+  + db_private_ip = (known after apply)
+  + vm_public_ips = [
+      + (known after apply),
+      + (known after apply),
+    ]
+
 ─────────────────────────────────────────────────────────────────────────────
 
 Note: You didn't use the -out option to save this plan, so Terraform can't
@@ -435,13 +447,13 @@ guarantee to take exactly these actions if you run "terraform apply" now.
 
 ## foundation-aws
 
-| Ressource GCP | Équivalent AWS | Fichier |
-| ------------- | -------------- | ------- |
-| Provider `google` | Provider `aws` (région `eu-west-3`, Paris) | `providers.tf` |
-| `google_compute_network` + `google_compute_subnetwork` | `aws_vpc` + `aws_subnet` (1 public, 2 privés) + `aws_internet_gateway` + `aws_route_table` | `network.tf` |
-| `google_compute_instance` + `count` | `aws_instance` + `count` (`var.vm_count = 2`) | `compute.tf` |
-| `google_sql_database_instance` (IP privée) | `aws_db_instance` (RDS MySQL) + `aws_db_subnet_group` dans les sous-réseaux privés | `database.tf` |
-| `google_dns_managed_zone` + `google_dns_record_set` | `aws_route53_zone` + `aws_route53_record` | `dns.tf` |
+| Ressource GCP | Équivalent AWS |
+| ------------- | -------------- |
+| Provider `google` | Provider `aws` (région `eu-west-3`, Paris) |
+| `google_compute_network` + `google_compute_subnetwork` | `aws_vpc` + `aws_subnet` (1 public, 2 privés) + `aws_internet_gateway` + `aws_route_table` |
+| `google_compute_instance` + `count` | `aws_instance` + `count` (`var.vm_count = 2`) |
+| `google_sql_database_instance` (IP privée) | `aws_db_instance` (RDS MySQL) + `aws_db_subnet_group` dans les sous-réseaux privés |
+| `google_dns_managed_zone` + `google_dns_record_set` | `aws_route53_zone` + `aws_route53_record` |
 
 ### Commandes
 
@@ -909,6 +921,15 @@ Terraform will perform the following actions:
     }
 
 Plan: 14 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + app_dns_name  = (known after apply)
+  + db_endpoint   = (known after apply)
+  + db_password   = (sensitive value)
+  + vm_public_ips = [
+      + (known after apply),
+      + (known after apply),
+    ]
 
 ─────────────────────────────────────────────────────────────────────────────
 

@@ -1,4 +1,3 @@
-# Étape 0 : on déclare à Terraform quel provider il doit télécharger et utiliser.
 terraform {
   required_providers {
     google = {
